@@ -26,7 +26,7 @@ typedef struct{
 void *multiplica(void *arg) {
     tArgs *args = (tArgs*) arg;
 
-    //o for mais externo é para dividir a tarefa entre threads
+    //o for mais externo é para dividir a tarefa entre threads (separacao por linha alternado)
     //os for's mais internos são relativos diretamente a multiplicacao
     for (int i = args->id; i < args->N; i += nthreads) {
         for (int j = 0; j < args->M; j++) {
