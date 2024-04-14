@@ -1,4 +1,10 @@
 // Programa que realiza a multiplicação de matrizes de forma concorrente
+/*
+Este programa recebe duas matrizes de entrada no formato de arquivos binários e matriz resultante da
+multiplicação é escrita em um arquivo binário de saida. Além disso, os tempos de inicialização, multiplicação,
+finzaliçao e total são calculados.
+*/
+
 
 #include<stdio.h>
 #include<stdlib.h>
