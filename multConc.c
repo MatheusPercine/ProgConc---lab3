@@ -15,15 +15,19 @@ int nthreads; // número de threads
 // Descomentar a linha abaixo terá como efeito imprimir as matrizes da multiplicação e de saida
 //#define TESTE
 
+// Cada thread guardara seu id e os numeros M e N das matrizes de multiplicao
 typedef struct{
     int id;
     int N;
     int M;
 } tArgs;
 
+// funcao utilizada pelas threads para multiplicacao
 void *multiplica(void *arg) {
     tArgs *args = (tArgs*) arg;
 
+    //o for mais externo é para dividir a tarefa entre threads
+    //os for's mais internos são relativos diretamente a multiplicacao
     for (int i = args->id; i < args->N; i += nthreads) {
         for (int j = 0; j < args->M; j++) {
             for (int k = 0; k < args->N; k++) {
@@ -39,7 +43,9 @@ int main(int argc, char* argv[]) {
     tArgs *args; // identificadores locais das threads e dimensão
     double inicio, fim, delta, total; // variaveis de monitoramento de tempo
 
+    //inicio da avaliacao do tempo de inicializacao e de tempo total
     GET_TIME(inicio);
+
     // leitura e avaliação dos parâmetros de entrada
     if (argc < 4) {
         printf("Digite: %s <matriz1 de entrada> <matriz2 de entrada> <saida> <numero de threads>\n", argv[0]);
@@ -48,8 +54,8 @@ int main(int argc, char* argv[]) {
     nthreads = atoi(argv[4]);
    
    FILE * descritorArquivoSaida; //descritor do arquivo de saída
-   FILE *descritorArquivoEntrada1;
-   FILE *descritorArquivoEntrada2;
+   FILE *descritorArquivoEntrada1; //descritor do arquivo da matriz1 de entrada
+   FILE *descritorArquivoEntrada2; //descritor do arquivo da matriz2 de entrada
    
 
     //inicializar mat1
@@ -88,6 +94,7 @@ int main(int argc, char* argv[]) {
         return 4;
     }
 
+    //imprime matriz1 de entrada
     #ifdef TESTE
     printf("Matriz 1 carregada:\n");
     for(int i=0; i<N; i++) {
@@ -140,6 +147,7 @@ int main(int argc, char* argv[]) {
         return 4;
     }
 
+    //imprime matriz2 de entrada
     #ifdef TESTE
     printf("Matriz 2 carregada:\n");
    for(int i=0; i<N; i++) {
@@ -151,6 +159,7 @@ int main(int argc, char* argv[]) {
     puts("");
     #endif
 
+    //fim da avaliacao do tempo de inicializacao
     GET_TIME(fim);
     delta = fim - inicio;
     total = delta;
@@ -158,7 +167,9 @@ int main(int argc, char* argv[]) {
     puts("");
 
     //multiplicacao da matriz pelo vetor
+    //inicio da avaliacao do tempo de multiplicacao
     GET_TIME(inicio);
+
     // alocação das estruturas
     tid = (pthread_t *) malloc(sizeof(pthread_t) * nthreads);
     if (tid == NULL) {
@@ -187,13 +198,14 @@ int main(int argc, char* argv[]) {
         pthread_join(*(tid + i), NULL);
     }
 
+    //fim da avaliacao do tempo de multiplicacao
     GET_TIME(fim)   
     delta = fim - inicio;
     total += delta;
     printf("Tempo multiplicacao: %lf\n", delta);
     puts("");
 
-    // exibição dos resultados
+    // exibição da matriz de saida
     #ifdef TESTE
     printf("Matriz de saida gerada:\n");
     for (int i = 0; i < N; i++) {
@@ -205,7 +217,9 @@ int main(int argc, char* argv[]) {
     puts("");
     #endif
 
+    //inicio da avaliacao do tempo de finalizacao
     GET_TIME(inicio);
+    
     // abre o arquivo de saída para escrita binária
     descritorArquivoSaida = fopen(argv[3], "wb");
     if(!descritorArquivoSaida) {
@@ -233,6 +247,8 @@ int main(int argc, char* argv[]) {
     fclose(descritorArquivoEntrada1);
     fclose(descritorArquivoEntrada2);
     fclose(descritorArquivoSaida);
+
+    //fim da avaliacao do tempo de finalizacao e tempo total
     GET_TIME(fim);   
     delta = fim - inicio;
     total += delta;

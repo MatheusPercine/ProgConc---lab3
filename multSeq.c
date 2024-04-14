@@ -17,7 +17,9 @@ int M; // numero de colunas
 int main(int argc, char* argv[]) {
     double inicio, fim, delta, total; // variaveis de monitoramento de tempo
 
+    //inicio da avaliacao do tempo de inicializacao e de tempo total
     GET_TIME(inicio);
+
     // leitura e avaliação dos parâmetros de entrada
     if (argc < 3) {
         printf("Digite: %s <matriz1 de entrada> <matriz2 de entrada> <saida>\n", argv[0]);
@@ -25,9 +27,9 @@ int main(int argc, char* argv[]) {
     }
    
    FILE * descritorArquivoSaida; //descritor do arquivo de saída
-   FILE *descritorArquivoEntrada1;
-   FILE *descritorArquivoEntrada2;
-
+   FILE *descritorArquivoEntrada1; //descritor do arquivo da matriz1 de entrada
+   FILE *descritorArquivoEntrada2; //descritor do arquivo da matriz2 de entrada
+ 
    //inicializar mat1
     //abre o arquivo de entrada para leitura binaria
     descritorArquivoEntrada1 = fopen(argv[1], "rb");
@@ -103,6 +105,7 @@ int main(int argc, char* argv[]) {
         return 7;
     }
 
+    //fim da avaliacao do tempo de inicializacao
     GET_TIME(fim);
     delta = fim - inicio;
     total = delta;
@@ -110,6 +113,7 @@ int main(int argc, char* argv[]) {
     puts("");
 
     //multiplicacao da matriz pelo vetor
+    //inicio da avaliacao do tempo de multiplicacao
     GET_TIME(inicio);
     for (int i = 0; i < N; i++) {
         for (int j = 0; j < M; j++) {
@@ -119,6 +123,7 @@ int main(int argc, char* argv[]) {
         }
     }
 
+    //fim da avaliacao do tempo de multiplicacao
     GET_TIME(fim)   
     delta = fim - inicio;
     total += delta;
@@ -153,7 +158,9 @@ int main(int argc, char* argv[]) {
     puts("");
     #endif
 
+    //inicio da avaliacao do tempo de finalizacao
     GET_TIME(inicio);
+    
     // abre o arquivo de saída para escrita binária
     descritorArquivoSaida = fopen(argv[3], "wb");
     if(!descritorArquivoSaida) {
@@ -179,6 +186,8 @@ int main(int argc, char* argv[]) {
     fclose(descritorArquivoEntrada1);
     fclose(descritorArquivoEntrada2);
     fclose(descritorArquivoSaida);
+
+    //fim da avaliacao do tempo de finalizacao e tempo total
     GET_TIME(fim); 
     delta = fim - inicio;
     total += delta;
